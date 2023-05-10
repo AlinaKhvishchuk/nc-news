@@ -1,3 +1,9 @@
 exports.getStatus = (req, res) => {
-  res.status(200).send({ msg: "API is running!" });
+  return fetchStatus()
+    .then((endpoints) => {
+      res.status(200).send({ endpoints: endpoints });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
