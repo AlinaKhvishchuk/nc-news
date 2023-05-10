@@ -1,3 +1,4 @@
+const { fetchStatus } = require("./../models/getStatus.models");
 exports.getStatus = (req, res) => {
   return fetchStatus()
     .then((endpoints) => {
