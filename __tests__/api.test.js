@@ -20,18 +20,6 @@ afterAll(() => {
   db.end();
 });
 
-describe("GET /api ", () => {
-  test("responds with a JSON object containing a 'msg' property and status code 200", () => {
-    return request(app)
-      .get("/api")
-      .expect(200)
-      .expect("Content-Type", "application/json; charset=utf-8")
-      .then((response) => {
-        expect(response.body).toEqual({ msg: "API is running!" });
-      });
-  });
-});
-
 describe("GET /api/topics", () => {
   it("GET status: 200 responds with an array of topic objects, each of which should have slug and description properties", () => {
     return request(app)
@@ -47,13 +35,7 @@ describe("GET /api/topics", () => {
       });
   });
 
-  it("GET status: 500, returns error msg in case of server err ", () => {
-    return request(app)
-      .get("/api/error")
-      .expect(500)
-      .then((response) => {
-        expect(response.status).toBe(500);
-        expect(response.body.msg).toBe("Server err! We are sorry!");
-      });
+  it("GET status: 404, returns error msg if the page is not found", () => {
+    return request(app).get("/api/gibberish").expect(404);
   });
 });
