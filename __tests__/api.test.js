@@ -164,3 +164,60 @@ describe("GET/api/articles/:articles_id", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+  it("GET status: 200, responds with an array of comment objects, each of which should have the following properties:comment_id, votes, created_at, author, body, article_id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments.length).toBe(11);
+        response.body.comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id");
+          expect(comment).toHaveProperty("votes");
+          expect(comment).toHaveProperty("created_at");
+          expect(comment).toHaveProperty("author");
+          expect(comment).toHaveProperty("body");
+          expect(comment).toHaveProperty("article_id");
+        });
+      });
+  });
+
+  it("GET status: 200, sorts by `created_at` in descending order", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments).toBeSorted({
+          descending: true,
+          key: "created_at",
+        });
+      });
+  });
+
+  it("GET status: 404, responds with an error msg `Not found` if there is no such article_id", () => {
+    return request(app)
+      .get("/api/articles/20/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article ID Not Found");
+      });
+  });
+
+  it("GET status:200, responds with an empty array if there is such article_id, but there is no comments for this article", () => {
+    return request(app)
+      .get("/api/articles/2/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comments).toEqual([]);
+      });
+  });
+  it("GET status: 400, responds with an error msg `Bad request` if there article_id is not of valid type", () => {
+    return request(app)
+      .get("/api/articles/2g/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+});
