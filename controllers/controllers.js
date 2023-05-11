@@ -2,6 +2,7 @@ const {
   fetchTopics,
   fetchArticles,
   selectArticleById,
+  selectCommentsById,
 } = require("./../models/models.js");
 const app = require("./../app.js");
 
@@ -30,6 +31,17 @@ exports.getArticleById = (req, res, next) => {
   selectArticleById(article_id)
     .then((article) => {
       res.status(200).send({ article: article });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getCommentsByArticleId = (req, res, next) => {
+  const article_id = req.params.article_id;
+  selectCommentsById(article_id)
+    .then((comments) => {
+      res.status(200).send({ comments: comments });
     })
     .catch((err) => {
       next(err);
