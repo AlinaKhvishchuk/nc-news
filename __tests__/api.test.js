@@ -86,20 +86,12 @@ describe("GET /api/topics", () => {
 });
 
 describe("GET/api/articles", () => {
-  it("GET status: 200, responds with an array of correct length, ", () => {
-    return request(app)
-      .get("/api/articles")
-      .expect(200)
-      .then((response) => {
-        expect(response.body.articles.length).toBe(12);
-      });
-  });
-
   it("GET status: 200, responds with an array of objects, each of which should have the following properties: author, title, article_id, topic, created_at, votes, article_img_url, comment_count", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then((response) => {
+        expect(response.body.articles.length).toBe(12);
         response.body.articles.forEach((article) => {
           expect(article).toHaveProperty("author");
           expect(article).toHaveProperty("title");
