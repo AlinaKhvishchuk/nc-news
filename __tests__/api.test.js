@@ -309,3 +309,66 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  it("PATCH status: 200, responds with an updated article, with incremented votes by given number ", () => {
+    const newVotes = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/articles/5")
+      .send(newVotes)
+      .then((response) => {
+        expect(response.status).toBe(200);
+        expect(response.body.article.votes).toBe(10);
+        expect(response.body.article).toHaveProperty("author");
+        expect(response.body.article).toHaveProperty("title");
+        expect(response.body.article).toHaveProperty("article_id");
+        expect(response.body.article).toHaveProperty("body");
+        expect(response.body.article).toHaveProperty("topic");
+        expect(response.body.article).toHaveProperty("created_at");
+        expect(response.body.article).toHaveProperty("votes");
+        expect(response.body.article).toHaveProperty("article_img_url");
+      });
+  });
+  it("PATCH status: 200, responds with an updated article, with decremented votes by given number  ", () => {
+    const newVotes = { inc_votes: -50 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(newVotes)
+      .then((response) => {
+        expect(response.status).toBe(200);
+        expect(response.body.article.votes).toBe(50);
+      });
+  });
+
+  it("PATCH status:400, responds with an error msg `Bad request` if there is no property `inc_votes`", () => {
+    const newVotes = { tiger: 10 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(newVotes)
+      .then((response) => {
+        expect(response.status).toBe(400);
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+
+  it("PATCH status:400, responds with an error msg `Bad request` if the value passed is not a number", () => {
+    const newVotes = { inc_votes: "ten" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(newVotes)
+      .then((response) => {
+        expect(response.status).toBe(400);
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+  it("PATCH status: 404, responds with an error msg `Not found` if there is no such article_id", () => {
+    const newVotes = { inc_votes: 10 };
+    return request(app)
+      .patch("/api/articles/200")
+      .send(newVotes)
+      .then((response) => {
+        expect(response.status).toBe(404);
+        expect(response.body.msg).toBe("Article ID Not Found");
+      });
+  });
+});

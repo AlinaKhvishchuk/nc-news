@@ -4,6 +4,7 @@ const {
   selectArticleById,
   selectCommentsById,
   createComment,
+  updateVotes,
 } = require("./../models/models.js");
 const app = require("./../app.js");
 
@@ -55,6 +56,18 @@ exports.postComment = (req, res, next) => {
   createComment(article_id, req.body)
     .then((result) => {
       res.status(201).send({ comment: result });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.patchVotes = (req, res, next) => {
+  const article_id = req.params.article_id;
+  const { inc_votes } = req.body;
+  updateVotes(article_id, inc_votes)
+    .then((result) => {
+      res.status(200).send({ article: result });
     })
     .catch((err) => {
       next(err);
