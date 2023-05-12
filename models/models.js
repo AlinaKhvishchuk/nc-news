@@ -66,6 +66,22 @@ exports.createComment = (article_id, newComment) => {
     });
 };
 
+exports.updateVotes = (article_id, inc_votes) => {
+  return checkArticleIdExists(article_id)
+    .then(() => {
+      return db.query(
+        `UPDATE articles
+    SET votes = votes + $1
+    WHERE article_id = $2
+    RETURNING *`,
+        [inc_votes, article_id]
+      );
+    })
+    .then((result) => {
+      return result.rows[0];
+    });
+};
+
 exports.removeComment = (comment_id) => {
   return checkCommentIdExists(comment_id)
     .then(() => {
