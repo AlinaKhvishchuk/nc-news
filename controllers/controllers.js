@@ -4,6 +4,7 @@ const {
   selectArticleById,
   selectCommentsById,
   createComment,
+  removeComment,
 } = require("./../models/models.js");
 const app = require("./../app.js");
 
@@ -55,6 +56,17 @@ exports.postComment = (req, res, next) => {
   createComment(article_id, req.body)
     .then((result) => {
       res.status(201).send({ comment: result });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.deleteComment = (req, res, next) => {
+  const comment_id = req.params.comment_id;
+  removeComment(comment_id)
+    .then((result) => {
+      res.status(204).send();
     })
     .catch((err) => {
       next(err);

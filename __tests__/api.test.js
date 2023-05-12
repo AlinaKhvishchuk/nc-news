@@ -310,13 +310,22 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-// describe("DELETE /api/comments/:comment_id", () => {
-//   it("DELETE status: 204, responds with no content", () => {
-//     return request(app)
-//       .delete("/api/comments/1")
-//       .then((response) => {
-//         expect(response.status).toBe(204);
-//         expect(response.body).toEqual({});
-//       });
-//   });
-// });
+describe("DELETE /api/comments/:comment_id", () => {
+  it("DELETE status: 204, responds with no content", () => {
+    return request(app)
+      .delete("/api/comments/5")
+      .then((response) => {
+        expect(response.status).toBe(204);
+        expect(response.body).toEqual({});
+      });
+  });
+
+  it("DELETE status: 404, responds with an err msg: Comment Id Not Found", () => {
+    return request(app)
+      .delete("/api/comments/120")
+      .then((response) => {
+        expect(response.status).toBe(404);
+        expect(response.body.msg).toBe("Comment ID Not Found");
+      });
+  });
+});
