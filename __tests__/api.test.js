@@ -221,3 +221,60 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  it("POST status: 201, responds with the posted comment", () => {
+    const testNewComment = {
+      username: "icellusedkars",
+      body: "Great news!Way to go!",
+    };
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(testNewComment)
+      .then((response) => {
+        expect(response.status).toBe(201);
+        expect(response.body.comment.author).toBe("icellusedkars");
+        expect(response.body.comment.body).toBe("Great news!Way to go!");
+      });
+  });
+
+  it("POST status: 404, responds with an error msg `Not found` if there is no such article_id", () => {
+    const testNewComment = {
+      username: "icellusedkars",
+      body: "Great news!Way to go!",
+    };
+    return request(app)
+      .post("/api/articles/200/comments")
+      .send(testNewComment)
+      .then((response) => {
+        expect(response.status).toBe(404);
+        expect(response.body.msg).toBe("Article ID Not Found");
+      });
+  });
+  it("POST status: 400, responds with an error msg `Bad request` if there article_id is not of valid type", () => {
+    const testNewComment = {
+      username: "icellusedkars",
+      body: "Great news!Way to go!",
+    };
+    return request(app)
+      .post("/api/articles/2o/comments")
+      .send(testNewComment)
+      .then((response) => {
+        expect(response.status).toBe(400);
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+
+  it("POST status: 400, responds with an error msg `Bad request` if there are no values in new comment", () => {
+    const testNewComment = {
+      body: "Great news!Way to go!",
+    };
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send(testNewComment)
+      .then((response) => {
+        expect(response.status).toBe(400);
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+});

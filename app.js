@@ -1,21 +1,25 @@
 const express = require("express");
+const app = express();
 const { getStatus } = require("./controllers/getStatus.controllers");
 const {
   getTopics,
   getArticles,
   getArticleById,
   getCommentsByArticleId,
+  postComment,
 } = require("./controllers/controllers.js");
 
-app = express();
+app.use(express.json());
+
 app.get("/api", getStatus);
 app.get("/api/topics", getTopics);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+app.post("/api/articles/:article_id/comments", postComment);
 
 app.use((err, req, res, next) => {
-  if (err.code === "22P02") {
+  if (err.code === "22P02" || err.code === "23502") {
     res.status(400).send({ msg: "Bad request" });
   } else {
     next(err);
