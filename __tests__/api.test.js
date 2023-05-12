@@ -328,4 +328,13 @@ describe("DELETE /api/comments/:comment_id", () => {
         expect(response.body.msg).toBe("Comment ID Not Found");
       });
   });
+
+  it("DELETE status: 400, responds with an err msg: Bad request", () => {
+    return request(app)
+      .delete("/api/comments/three")
+      .then((response) => {
+        expect(response.status).toBe(400);
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
 });
