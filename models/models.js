@@ -48,3 +48,17 @@ exports.selectCommentsById = (article_id) => {
       return result.rows;
     });
 };
+
+exports.createComment = (article_id, newComment) => {
+  const { username, body } = newComment;
+  return checkArticleIdExists(article_id)
+    .then(() => {
+      return db.query(
+        `INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *`,
+        [body, username, article_id]
+      );
+    })
+    .then((result) => {
+      return result.rows[0];
+    });
+};
