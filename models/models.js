@@ -1,5 +1,8 @@
 const db = require("./../db/connection");
-const { checkArticleIdExists } = require("./../db/seeds/utils");
+const {
+  checkArticleIdExists,
+  checkCommentIdExists,
+} = require("./../db/seeds/utils");
 
 exports.fetchTopics = () => {
   return db.query(`SELECT * FROM topics;`).then((result) => {
@@ -76,5 +79,17 @@ exports.updateVotes = (article_id, inc_votes) => {
     })
     .then((result) => {
       return result.rows[0];
+    });
+};
+
+exports.removeComment = (comment_id) => {
+  return checkCommentIdExists(comment_id)
+    .then(() => {
+      return db.query(`DELETE FROM comments WHERE comment_id = $1`, [
+        comment_id,
+      ]);
+    })
+    .then((result) => {
+      return null;
     });
 };
