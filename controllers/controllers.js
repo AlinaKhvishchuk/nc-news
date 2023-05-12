@@ -6,6 +6,7 @@ const {
   createComment,
   updateVotes,
   removeComment,
+  fetchUsers,
 } = require("./../models/models.js");
 const app = require("./../app.js");
 
@@ -79,6 +80,16 @@ exports.deleteComment = (req, res, next) => {
   removeComment(comment_id)
     .then((result) => {
       res.status(204).send();
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.getUsers = (req, res, next) => {
+  return fetchUsers()
+    .then((users) => {
+      res.status(200).send({ users: users });
     })
     .catch((err) => {
       next(err);
