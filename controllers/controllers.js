@@ -73,3 +73,9 @@ exports.patchVotes = (req, res, next) => {
       next(err);
     });
 };
+
+exports.getUsers = (req, res, next) => {
+  return fetchUsers().then((users) => {
+    res.status(200).send({ users: users });
+  }).catch;
+};

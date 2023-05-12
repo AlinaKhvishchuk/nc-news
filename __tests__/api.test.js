@@ -385,3 +385,19 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+// describe("GET /api/users", () => {
+//   it("GET status: 200, responds with an array of objects, each of which should have the following properties: username, name, avatar_url", () => {
+//     return request(app)
+//       .get("/api/users")
+//       .expect(200)
+//       .then((response) => {
+//         expect(response.body.articles.users).toBe(4);
+//         response.body.users.forEach((user) => {
+//           expect(typeof user.username).toBe("string");
+//           expect(typeof user.name).toHaveProperty("string");
+//           expect(typeof user.avatar_url).toBe("string");
+//         });
+//       });
+//   });
+// });
