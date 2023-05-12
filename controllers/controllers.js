@@ -5,6 +5,7 @@ const {
   selectCommentsById,
   createComment,
   updateVotes,
+  removeComment,
 } = require("./../models/models.js");
 const app = require("./../app.js");
 
@@ -68,6 +69,16 @@ exports.patchVotes = (req, res, next) => {
   updateVotes(article_id, inc_votes)
     .then((result) => {
       res.status(200).send({ article: result });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+exports.deleteComment = (req, res, next) => {
+  const comment_id = req.params.comment_id;
+  removeComment(comment_id)
+    .then((result) => {
+      res.status(204).send();
     })
     .catch((err) => {
       next(err);
