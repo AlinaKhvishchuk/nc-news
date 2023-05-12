@@ -366,7 +366,7 @@ describe("PATCH /api/articles/:article_id", () => {
   it("PATCH status:400, responds with an error msg `Bad request` if the article_id is of an invalid type", () => {
     const newVotes = { inc_votes: 10 };
     return request(app)
-      .patch("/api/articles/`1`")
+      .patch("/api/articles/one")
       .send(newVotes)
       .then((response) => {
         expect(response.status).toBe(400);
